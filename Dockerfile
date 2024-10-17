@@ -23,6 +23,12 @@ RUN apt-get update && apt-get install -y \
     libappindicator3-1 \
     libgbm-dev
 
+    # Install Puppeteer and necessary browser files
+RUN npm install puppeteer
+
+# Optionally, install a specific version of Chrome if needed
+RUN npx puppeteer browsers install chrome
+
 # Set working directory
 WORKDIR /app
 

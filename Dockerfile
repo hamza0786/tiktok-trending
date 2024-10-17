@@ -1,34 +1,15 @@
 # Use a Node.js image as the base
 FROM node:18
 
-# Install Chrome
+# Install Chromium instead of Google Chrome
 RUN apt-get update && apt-get install -y \
-    gconf-service \
-    libasound2 \
-    libatk1.0-0 \
-    libcups2 \
-    libgconf-2-4 \
-    libnspr4 \
-    libnss3 \
-    libx11-xcb1 \
-    libxcomposite1 \
-    libxcursor1 \
-    libxdamage1 \
-    libxext6 \
-    libxi6 \
-    libxtst6 \
+    chromium \
     fonts-liberation \
     xdg-utils \
     wget \
-    libappindicator3-1 \
-    libgbm-dev
-
-    # Install Puppeteer and necessary browser files
-RUN npm install puppeteer
-
-# Optionally, install a specific version of Chrome if needed
-RUN npx puppeteer browsers install chrome
-
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+    
 # Set working directory
 WORKDIR /app
 
@@ -40,8 +21,9 @@ RUN npm install
 COPY . .
 
 # Set environment variable to use system Chrome
+# Set environment variable to use Chromium
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-ENV CHROMIUM_PATH=/usr/bin/google-chrome
+ENV CHROMIUM_PATH=/usr/bin/chromium
 
 # Expose the application port
 EXPOSE 3000

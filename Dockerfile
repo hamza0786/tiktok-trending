@@ -1,14 +1,23 @@
 # Use a Node.js image as the base
 FROM node:18
 
-# Install Chromium instead of Google Chrome
+FROM 495519747063.dkr.ecr.us-east-2.amazonaws.com/awsfusionruntime-nodejs18-build:uuid-nodejs18-20240925-003710-44 AS pre-build-stage
+
+# Install Chromium and any other dependencies
 RUN apt-get update && apt-get install -y \
     chromium \
-    fonts-liberation \
-    xdg-utils \
-    wget \
-    && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+COPY . /app
+WORKDIR /app/
+
+# The remaining stages
+FROM pre-build-stage AS build-stage
+# Your additional build commands
+
+FROM 495519747063.dkr.ecr.us-east-2.amazonaws.com/awsfusionruntime-nodejs18:uuid-nodejs18-20240925-003710-44 AS packaging-stage
+COPY --from=build-stage /app /app
+WORKDIR /app/
 
 RUN which chromium
     

@@ -1,0 +1,6 @@
+version: 1.0
+services:
+  my-service:
+    image:
+      repository: <your-ecr-repo-url> # Replace with your ECR repository URL if using ECR
+    port: 8080

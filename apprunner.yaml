@@ -1,6 +1,6 @@
 version: 1.0
-services:
-  my-service:
-    image:
-      repository: <your-ecr-repo-url> # Replace with your ECR repository URL if using ECR
-    port: 8080
+runtime: docker
+image:
+  repository: hamza0786/tiktok-trending
+  tag: latest  # Or the specific tag you're using
+startCommand: "python3 app.py"

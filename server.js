@@ -1,70 +1,42 @@
 const express = require('express');
 const puppeteer = require('puppeteer');
 const NodeCache = require('node-cache');
-const rateLimit = require('express-rate-limit');
 
 // Cache configuration (time in seconds, here 24 hours)
 const cache = new NodeCache({ stdTTL: 86400 }); // Cache TTL: 24 hours
 
 const app = express();
-const port = process.env.PORT || 3000;
-
-// Rate limiter: maximum of 5 requests per minute
-const limiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: 5, // limit each IP to 5 requests per windowMs
-});
-
-// Apply the rate limiting middleware to the API endpoint
-app.use('/trending-creators', limiter);
+const port = 3000;
 
 // Function to scrape TikTok trending creators
 const scrapeTikTokTrendingCreators = async () => {
-    let browser;
-    try {
-        browser = await puppeteer.launch({ 
-            headless: true, 
-            args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+    const browser = await puppeteer.launch();
+    const page = await browser.newPage();
+
+    // Go to TikTok's trending page (adjust URL based on region if necessary)
+    await page.goto('https://www.tiktok.com/trending');
+
+    // Scrape trending creators
+    const creators = await page.evaluate(() => {
+        const creatorElements = document.querySelectorAll('div.creator-info'); // Adjust selector based on page structure
+
+        const data = [];
+        creatorElements.forEach((creatorElement) => {
+            const name = creatorElement.querySelector('.creator-name')?.innerText;
+            const avatar = creatorElement.querySelector('.creator-avatar img')?.src;
+
+            if (name && avatar) {
+                data.push({
+                    name: name,
+                    avatar: avatar,
+                });
+            }
         });
-        const page = await browser.newPage();
+        return data;
+    });
 
-        // Set the user-agent to avoid bot detection
-        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36');
-
-        // Go to TikTok's trending page (adjust URL based on region if necessary)
-        await page.goto('https://www.tiktok.com/trending', { waitUntil: 'networkidle2' });
-
-        // Wait for trending creator elements to load
-        await page.waitForSelector('div.creator-info');
-
-        // Scrape trending creators
-        const creators = await page.evaluate(() => {
-            const creatorElements = document.querySelectorAll('div.creator-info'); // Adjust selector based on page structure
-
-            const data = [];
-            creatorElements.forEach((creatorElement) => {
-                const name = creatorElement.querySelector('.creator-name')?.innerText;
-                const avatar = creatorElement.querySelector('.creator-avatar img')?.src;
-
-                if (name && avatar) {
-                    data.push({
-                        name: name,
-                        avatar: avatar,
-                    });
-                }
-            });
-            return data;
-        });
-
-        return creators;
-    } catch (error) {
-        console.error('Error scraping TikTok:', error);
-        throw error;
-    } finally {
-        if (browser) {
-            await browser.close();
-        }
-    }
+    await browser.close();
+    return creators;
 };
 
 // Define API endpoint
@@ -80,11 +52,6 @@ app.get('/trending-creators', async (req, res) => {
         // If not in cache, scrape the data
         console.log('Scraping TikTok trending creators...');
         const creators = await scrapeTikTokTrendingCreators();
-
-        // Handle case where no creators were scraped
-        if (!creators || creators.length === 0) {
-            return res.status(404).json({ error: 'No trending creators found' });
-        }
 
         // Store the data in cache before responding
         cache.set('trendingCreators', creators);

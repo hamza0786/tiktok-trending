@@ -1,4 +1,4 @@
 version: 1.0
 runtime: CUSTOM
 build:
-  dockerfile: Dockerfile
+  dockerfile: app/Dockerfile

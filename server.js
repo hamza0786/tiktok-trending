@@ -11,12 +11,12 @@ const port = 3000;
 // Function to scrape TikTok trending creators
 const scrapeTikTokTrendingCreators = async () => {
 
-    // Launch Puppeteer with the default Chromium
     const browser = await puppeteer.launch({
-        executablePath: process.env.CHROMIUM_PATH || '/usr/bin/google-chrome', // Explicitly set Chrome path
-        headless: true,  // Optional: false if you want to see the browser
-        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required in Docker
+        executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium',
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
+    console.log('Using executable path:', process.env.CHROMIUM_PATH || '/usr/bin/chromium');
     const page = await browser.newPage();
 
     // Go to TikTok's trending page (adjust URL based on region if necessary)

@@ -10,6 +10,9 @@ const port = 3000;
 
 // Function to scrape TikTok trending creators
 const scrapeTikTokTrendingCreators = async () => {
+    const browserFetcher = puppeteer.createBrowserFetcher({ path: '/tmp/puppeteer-cache' });
+    await browserFetcher.download(puppeteer.PUPPETEER_REVISIONS.chromium);
+
     // Launch Puppeteer with the default Chromium
     const browser = await puppeteer.launch({
     headless: true,

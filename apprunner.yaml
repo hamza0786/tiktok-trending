@@ -1,4 +1,7 @@
 version: 1.0
-runtime: CUSTOM
+runtime: python3
 build:
-  dockerfile: Dockerfile
+  commands:
+    build: pip install -r requirements.txt
+run:
+  command: python app.py

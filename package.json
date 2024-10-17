@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "puppeteer-core": "^20.1.0",
+    "puppeteer": "^23.6.0",
     "node-cache": "^5.1.2"
   },
   "author": "Your Name",

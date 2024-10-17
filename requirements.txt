@@ -1,2 +1,4 @@
 Flask
 TikTokApi
+urllib3<2
+requests

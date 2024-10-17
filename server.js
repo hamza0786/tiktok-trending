@@ -1,5 +1,5 @@
 const express = require('express');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const NodeCache = require('node-cache');
 
 // Cache configuration (time in seconds, here 24 hours)
@@ -12,9 +12,8 @@ const port = 3000;
 const scrapeTikTokTrendingCreators = async () => {
 
     const browser = await puppeteer.launch({
-        executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium',
+        executablePath: process.env.CHROME_BIN || '/usr/bin/chromium',
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     console.log('Using executable path:', process.env.CHROMIUM_PATH || '/usr/bin/chromium');
     const page = await browser.newPage();

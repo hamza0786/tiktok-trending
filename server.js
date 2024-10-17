@@ -10,12 +10,15 @@ const port = 3000;
 
 // Function to scrape TikTok trending creators
 const scrapeTikTokTrendingCreators = async () => {
-    await puppeteer.createBrowserFetcher().download(puppeteer.PUPPETEER_REVISIONS.chromium);
-    const browser = await puppeteer.launch();
+    // Launch Puppeteer with the default Chromium
+    const browser = await puppeteer.launch({
+        headless: true,
+        executablePath: process.env.CHROMIUM_PATH || puppeteer.executablePath(), // Use environment variable or default path
+    });
     const page = await browser.newPage();
 
     // Go to TikTok's trending page (adjust URL based on region if necessary)
-    await page.goto('https://www.tiktok.com/trending');
+    await page.goto('https://www.tiktok.com/trending', { waitUntil: 'networkidle2' });
 
     // Scrape trending creators
     const creators = await page.evaluate(() => {

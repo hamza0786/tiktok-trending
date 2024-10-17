@@ -1,17 +1,18 @@
 {
-  "name": "trending-creators-api",
+  "name": "tiktok-trending-creators-api",
   "version": "1.0.0",
-  "description": "A Node.js API that scrapes trending TikTok creators and returns their names and avatars.",
-  "main": "server.js",
+  "description": "An API to fetch trending creators from TikTok",
+  "main": "server.js", // or your main file
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js", // or your main entry point
+    "install": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install" // Skip Chromium download if necessary
   },
   "dependencies": {
     "express": "^4.17.1",
-    "puppeteer": "^19.0.0",
+    "puppeteer": "^20.1.0", // Ensure you're using a compatible version
     "node-cache": "^5.1.2"
   },
-  "author": "Your Name",
-  "license": "ISC"
+  "engines": {
+    "node": "18" // Specify the Node.js version
+  }
 }

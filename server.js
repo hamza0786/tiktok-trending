@@ -1,18 +1,31 @@
 const express = require('express');
 const puppeteer = require('puppeteer');
 const NodeCache = require('node-cache');
+const rateLimit = require('express-rate-limit');
 
 // Cache configuration (time in seconds, here 24 hours)
 const cache = new NodeCache({ stdTTL: 86400 }); // Cache TTL: 24 hours
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
+
+// Rate limiter: maximum of 5 requests per minute
+const limiter = rateLimit({
+    windowMs: 1 * 60 * 1000, // 1 minute
+    max: 5, // limit each IP to 5 requests per windowMs
+});
+
+// Apply the rate limiting middleware to the API endpoint
+app.use('/trending-creators', limiter);
 
 // Function to scrape TikTok trending creators
 const scrapeTikTokTrendingCreators = async () => {
     let browser;
     try {
-        browser = await puppeteer.launch({ headless: true });
+        browser = await puppeteer.launch({ 
+            headless: true, 
+            args: ['--no-sandbox', '--disable-setuid-sandbox'] 
+        });
         const page = await browser.newPage();
 
         // Set the user-agent to avoid bot detection

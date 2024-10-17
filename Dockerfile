@@ -1,5 +1,5 @@
 # Use the official Python 3.11 image
-FROM python:3.11-slim
+FROM python:3.11
 
 # Install pip and essential build dependencies
 RUN apt-get update && apt-get install -y \

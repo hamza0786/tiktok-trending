@@ -1,8 +1,7 @@
-# Use the official Node.js image
 FROM node:18-slim
 
-# Install dependencies for Puppeteer and other required packages
-RUN apt-get update && apt-get install -y \
+# Install only essential packages in one layer
+RUN apt-get update && apt-get install -y --no-install-recommends \
     chromium \
     libx11-xcb1 \
     libxcomposite1 \
@@ -16,36 +15,22 @@ RUN apt-get update && apt-get install -y \
     libatk1.0-0 \
     libgtk-3-0 \
     libgbm-dev \
-    libxshmfence-dev \
-    libglu1-mesa \
-    libdrm-dev \
     ca-certificates \
-    fonts-liberation \
-    libappindicator3-1 \
-    libx11-6 \
-    libxext6 \
-    libxrender1 \
-    xdg-utils \
-    --no-install-recommends \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Set environment variable for Puppeteer to use the installed Chromium
+# Set the environment variable for Puppeteer
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
 
-# Set the working directory
 WORKDIR /app
 
-# Copy package.json and package-lock.json to install dependencies
 COPY package*.json ./
 
-# Install application dependencies
-RUN npm install
+# Install npm dependencies
+RUN npm install --production
 
-# Copy the application source code
 COPY . .
 
-# Expose the application port
+# Expose the desired port
 EXPOSE 3000
 
 # Start the application

@@ -1,5 +1,6 @@
 const express = require('express');
-const puppeteer = require('puppeteer-core');
+const axios = require('axios');
+const cheerio = require('cheerio');
 const NodeCache = require('node-cache');
 
 // Cache configuration (time in seconds, here 24 hours)
@@ -10,38 +11,32 @@ const port = 3000;
 
 // Function to scrape TikTok trending creators
 const scrapeTikTokTrendingCreators = async () => {
-
-    const browser = await puppeteer.launch({
-        executablePath: process.env.CHROME_BIN || '/usr/bin/chromium',
-        headless: true,
-    });
-    console.log('Using executable path:', process.env.CHROMIUM_PATH || '/usr/bin/chromium');
-    const page = await browser.newPage();
-
-    // Go to TikTok's trending page (adjust URL based on region if necessary)
-    await page.goto('https://www.tiktok.com/trending', { waitUntil: 'networkidle2' });
-
-    // Scrape trending creators
-    const creators = await page.evaluate(() => {
-        const creatorElements = document.querySelectorAll('div.creator-info'); // Adjust selector based on page structure
-
-        const data = [];
-        creatorElements.forEach((creatorElement) => {
-            const name = creatorElement.querySelector('.creator-name')?.innerText;
-            const avatar = creatorElement.querySelector('.creator-avatar img')?.src;
+    try {
+        // Fetch the TikTok trending page
+        const { data } = await axios.get('https://www.tiktok.com/trending');
+        
+        // Load the HTML into Cheerio
+        const $ = cheerio.load(data);
+        
+        // Scrape trending creators
+        const creators = [];
+        $('div.creator-info').each((index, element) => { // Adjust selector based on page structure
+            const name = $(element).find('.creator-name').text();
+            const avatar = $(element).find('.creator-avatar img').attr('src');
 
             if (name && avatar) {
-                data.push({
+                creators.push({
                     name: name,
                     avatar: avatar,
                 });
             }
         });
-        return data;
-    });
 
-    await browser.close();
-    return creators;
+        return creators;
+    } catch (error) {
+        console.error('Error scraping TikTok trending creators:', error);
+        throw error;
+    }
 };
 
 // Define API endpoint

@@ -9,6 +9,8 @@ RUN apt-get update && apt-get install -y \
     wget \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+RUN which chromium
     
 # Set working directory
 WORKDIR /app

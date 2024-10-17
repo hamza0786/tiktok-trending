@@ -1,6 +1,0 @@
-version: 1.0
-runtime: python27
-image:
-  repository: hamza0786/tiktok-trending
-  tag: latest  # Or the specific tag you're using
-startCommand: "python3 app.py"

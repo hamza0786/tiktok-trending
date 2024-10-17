@@ -18,10 +18,13 @@ const scrapeTikTokTrendingCreators = async () => {
         // Load the HTML into Cheerio
         const $ = cheerio.load(data);
         
+        // Log the HTML data to inspect the structure
+        console.log(data);  // Log the full HTML response
+
         // Scrape trending creators
         const creators = [];
-        $('div.creator-info').each((index, element) => { // Adjust selector based on page structure
-            const name = $(element).find('.creator-name').text();
+        $('div.creator-info').each((index, element) => {
+            const name = $(element).find('.creator-name').text().trim(); // Ensure to trim spaces
             const avatar = $(element).find('.creator-avatar img').attr('src');
 
             if (name && avatar) {
@@ -32,6 +35,7 @@ const scrapeTikTokTrendingCreators = async () => {
             }
         });
 
+        console.log('Creators found:', creators);  // Log the creators array
         return creators;
     } catch (error) {
         console.error('Error scraping TikTok trending creators:', error);

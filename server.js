@@ -12,8 +12,12 @@ const port = 3000;
 // Function to scrape TikTok trending creators
 const scrapeTikTokTrendingCreators = async () => {
     try {
-        // Fetch the TikTok trending page
-        const { data } = await axios.get('https://www.tiktok.com/trending');
+        // Fetch the TikTok trending page with headers
+        const { data } = await axios.get('https://www.tiktok.com/trending', {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
+            },
+        });
         
         // Load the HTML into Cheerio
         const $ = cheerio.load(data);
@@ -21,10 +25,10 @@ const scrapeTikTokTrendingCreators = async () => {
         // Log the HTML data to inspect the structure
         console.log(data);  // Log the full HTML response
 
-        // Scrape trending creators
+        // Scrape trending creators (update selectors as needed)
         const creators = [];
         $('div.creator-info').each((index, element) => {
-            const name = $(element).find('.creator-name').text().trim(); // Ensure to trim spaces
+            const name = $(element).find('.creator-name').text().trim();
             const avatar = $(element).find('.creator-avatar img').attr('src');
 
             if (name && avatar) {

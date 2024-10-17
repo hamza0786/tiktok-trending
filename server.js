@@ -1,5 +1,5 @@
 const express = require('express');
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 const NodeCache = require('node-cache');
 
 // Cache configuration (time in seconds, here 24 hours)
@@ -13,8 +13,8 @@ const scrapeTikTokTrendingCreators = async () => {
 
     // Launch Puppeteer with the default Chromium
     const browser = await puppeteer.launch({
-    headless: true,
-    executablePath: '/usr/bin/google-chrome', // Explicitly point to the installed Chrome
+        headless: true,
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],  // Required in certain environments like AWS
     });
     const page = await browser.newPage();
 

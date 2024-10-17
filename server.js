@@ -13,7 +13,7 @@ const port = 3000;
 const scrapeTikTokTrendingCreators = async () => {
     try {
         // Fetch the TikTok trending page with headers
-        const { data } = await axios.get('https://www.tiktok.com/trending', {
+        const { data } = await axios.get('https://www.tiktok.com/foryou?lang=en', {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3',
             },

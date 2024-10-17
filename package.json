@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "install": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install"
+    "install": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install",
+    "dev": "nodemon server.js",
+    "test": "jest"
   },
   "dependencies": {
     "express": "^4.17.1",
@@ -14,5 +16,6 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  }
+  },
+  "license": "MIT" 
 }

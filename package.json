@@ -13,6 +13,6 @@
     "node-cache": "^5.1.2"
   },
   "engines": {
-    "node": "18" // Specify the Node.js version
+    "node": ">=18.0.0" // Specify the Node.js version
   }
 }

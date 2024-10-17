@@ -1,0 +1,17 @@
+{
+  "name": "trending-creators-api",
+  "version": "1.0.0",
+  "description": "A Node.js API that scrapes trending TikTok creators and returns their names and avatars.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^4.17.1",
+    "puppeteer": "^19.0.0",
+    "node-cache": "^5.1.2"
+  },
+  "author": "Your Name",
+  "license": "ISC"
+}

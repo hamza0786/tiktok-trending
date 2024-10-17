@@ -14,7 +14,8 @@ const scrapeTikTokTrendingCreators = async () => {
     // Launch Puppeteer with the default Chromium
     const browser = await puppeteer.launch({
         headless: true,
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],  // Required in certain environments like AWS
+        executablePath: '/root/.cache/puppeteer/chrome/130.0.6723.58/linux/chrome', // Specify the Chrome binary path
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
 

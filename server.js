@@ -13,9 +13,9 @@ const scrapeTikTokTrendingCreators = async () => {
 
     // Launch Puppeteer with the default Chromium
     const browser = await puppeteer.launch({
-        headless: true,
-        executablePath: '/root/.cache/puppeteer/chrome/130.0.6723.58/linux/chrome', // Specify the Chrome binary path
-        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        executablePath: process.env.CHROMIUM_PATH || '/usr/bin/google-chrome', // Explicitly set Chrome path
+        headless: true,  // Optional: false if you want to see the browser
+        args: ['--no-sandbox', '--disable-setuid-sandbox'], // Required in Docker
     });
     const page = await browser.newPage();
 

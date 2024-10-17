@@ -2,17 +2,17 @@
   "name": "tiktok-trending-creators-api",
   "version": "1.0.0",
   "description": "An API to fetch trending creators from TikTok",
-  "main": "server.js", // or your main file
+  "main": "server.js",
   "scripts": {
-    "start": "node server.js", // or your main entry point
-    "install": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install" // Skip Chromium download if necessary
+    "start": "node server.js",
+    "install": "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true npm install"
   },
   "dependencies": {
     "express": "^4.17.1",
-    "puppeteer": "^20.1.0", // Ensure you're using a compatible version
+    "puppeteer": "^20.1.0",
     "node-cache": "^5.1.2"
   },
   "engines": {
-    "node": ">=18.0.0" // Specify the Node.js version
+    "node": ">=18.0.0"
   }
 }
